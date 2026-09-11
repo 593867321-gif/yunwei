@@ -1,4 +1,4 @@
-# Codemagic 构建 iOS 正式版（IPA）操作指引
+﻿# Codemagic 构建 iOS 正式版（IPA）操作指引
 
 > 适用版本：优达客运营 1.0.5 (build 7)　生成：2026-09-11
 > 目标：在 Codemagic 的 macOS 构建机上，产出**可安装到真机**的签名 IPA。
@@ -196,13 +196,13 @@ ad-hoc 包**只能装到描述文件里包含的设备**。上述 6 台都已登
 
 ---
 
-## 九、TestFlight 灰度分发（不上架 App Store）
+## 八、TestFlight 灰度分发（不上架 App Store）
 
 > 目标：让测试员通过 **TestFlight App** 安装，无需登记设备 UDID。
 > 走这条路**不需要** ICP 备案号——备案号是提审 App Store 上架时的必填字段，
 > TestFlight 走的是 Beta App Review，不填这一项。
 
-### 9.0 三种分发方式对比（先搞清楚为什么换）
+### 8.0 三种分发方式对比（先搞清楚为什么换）
 
 | 方式 | 受众 | 设备限制 | 审核 | 用哪个 workflow |
 |---|---|---|---|---|
@@ -213,14 +213,14 @@ ad-hoc 包**只能装到描述文件里包含的设备**。上述 6 台都已登
 
 TestFlight 构建版本**自上传起最长可测 90 天**，过期需重新构建上传。
 
-### 9.1 为什么签名要换：Ad Hoc 与 App Store 描述文件不能混用
+### 8.1 为什么签名要换：Ad Hoc 与 App Store 描述文件不能混用
 
 `ios-testflight` 工作流用的描述文件是 **App Store 类型**（引用名 `youdake_appstore`），
 不是现有的 `youdake_adhoc`。证书可复用（同一张 `youdake_dist` 通用）。
 
 所以要做一次性的准备：**新建一个 App Store 类型描述文件并上传**。
 
-### 9.2 步骤 1：新建 App Store 描述文件（一次性，约 3 分钟）
+### 8.2 步骤 1：新建 App Store 描述文件（一次性，约 3 分钟）
 
 1. https://developer.apple.com/account/resources/profiles/list → **+**
 2. Distribution 下选 **App Store**（不是 Ad Hoc）→ Continue
@@ -233,7 +233,7 @@ TestFlight 构建版本**自上传起最长可测 90 天**，过期需重新构�
 > 这一步是纯网页操作 + 文件上传，**不经过那个报 401 的 API 接口**，所以不会再撞权限问题。
 > 上传后看 Certificate 列有没有绿色对勾，没有说明证书没匹配上。
 
-### 9.3 步骤 2：App Store Connect 建测试组
+### 8.3 步骤 2：App Store Connect 建测试组
 
 1. https://appstoreconnect.apple.com → 我的 App → **优达客运营**
    （App 记录之前已建好：Bundle ID `com.youdake.operation.ios`、SKU `youdake-operation-ios`）
@@ -250,7 +250,7 @@ TestFlight 构建版本**自上传起最长可测 90 天**，过期需重新构�
    ```
    > 🔴 不填或填错组名，构建能成功但**不会自动分发给测试组**（得手动在 TestFlight 页把构建拖进组）。
 
-### 9.4 步骤 3：触发 TestFlight 构建
+### 8.4 步骤 3：触发 TestFlight 构建
 
 1. push 最新配置（若还没推）
 2. Codemagic → yunwei app → **Start new build**
@@ -260,7 +260,7 @@ TestFlight 构建版本**自上传起最长可测 90 天**，过期需重新构�
 上传后在 TestFlight 页看到构建版本，状态流转：
 `正在处理`（约 5-30 分钟）→ 内部测试可装 → 外部测试需等 Beta App Review 通过
 
-### 9.5 步骤 4：测试员安装
+### 8.5 步骤 4：测试员安装
 
 1. iPhone 从 App Store 装 **TestFlight** App（官方）
 2. 用被邀请的 Apple ID 登录
@@ -269,7 +269,7 @@ TestFlight 构建版本**自上传起最长可测 90 天**，过期需重新构�
 
 > 测试员**不需要**登记 UDID，这是相比 ad-hoc 最大的好处。
 
-### 9.6 🔴 上架/灰度前必须知道的三个风险
+### 8.6 🔴 上架/灰度前必须知道的三个风险
 
 1. **替代库未换回官方依赖**。当前包用的是 `local_deps/` 里的功能替代库
    （因原私有依赖 `flutter_lib.git` 返回 403 而反推实现，已过 50 项行为测试 + 安卓真机验证）。
@@ -281,7 +281,7 @@ TestFlight 构建版本**自上传起最长可测 90 天**，过期需重新构�
    当前是 1.0.5 / build 7，下次上传前要改成 build 8。
    改法：编辑 `pubspec.yaml` 的 `version: 1.0.5+7` → `1.0.5+8`。
 
-### 9.7 TestFlight 常见报错
+### 8.7 TestFlight 常见报错
 
 | 现象 | 原因 | 解决 |
 |---|---|---|
@@ -294,7 +294,7 @@ TestFlight 构建版本**自上传起最长可测 90 天**，过期需重新构�
 
 ---
 
-## 十、风险提示（务必知悉）
+## 九、风险提示（务必知悉）
 
 1. **替代库非官方原库**。`local_deps/` 里的 `itwo_flutter_base`/`itwo_flutter_net` 是我依据项目 195 处调用反推实现的，已过 50 项行为测试（42 项基础 + 8 项扫码回归）+ Android 真机验证（你反馈可用），但无法保证与原库 100% 一致。iOS 首次构建后，请重点验证：登录（MD5+BCrypt）、token 持久化（退出重进不掉登录）、**扫码成功弹「二维码秘钥」弹窗**、推送、首页看板与库存刷新。
 2. **拿到原库权限后应换回官方依赖重建**：把 `pubspec.yaml` 的两个 `path:` 改回 `git:`，删掉 `local_deps/`，重跑构建。
