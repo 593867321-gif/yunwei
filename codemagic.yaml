@@ -80,16 +80,14 @@ workflows:
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
-    publishing:
-      email:
-        recipients:
-          - <你的邮箱>                  # 构建结果通知
-        notify:
-          success: true
-          failure: true
-      # 可选：上传蒲公英（与项目 build.sh 行为一致）。在控制台把 PGY 密钥配成环境变量后取消注释
-      # scripts:
-      #   post: |
-      #     IPA=$(ls build/ios/ipa/*.ipa | head -1)
-      #     curl -s -F "file=@$IPA" -F "uKey=$PGY_USER_KEY" -F "_api_key=$PGY_API_KEY" \
-      #       https://www.pgyer.com/apiv2/app/upload
+    # 说明：此处刻意不配置 publishing.email —— Codemagic 严格校验 recipients 必须是
+    # 合法邮箱地址，占位符会导致整个 codemagic.yaml 校验失败、构建无法启动。
+    # 邮件通知仅用于构建结果提醒，与产出 IPA 无关，故移除。
+    # 如需通知，在控制台 App settings > Notifications 里配置，或在此填入真实邮箱后取消注释：
+    # publishing:
+    #   email:
+    #     recipients:
+    #       - you@example.com
+    #     notify:
+    #       success: true
+    #       failure: true
