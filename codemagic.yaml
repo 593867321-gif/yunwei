@@ -23,9 +23,9 @@ workflows:
     max_build_duration: 60
     instance_type: mac_mini_m2          # Apple Silicon 构建机
     integrations:
-      # 走「App Store Connect API Key 自动签名」时启用下一行，
-      # 名称 = 你在 Codemagic Team settings > Team integrations > Developer Portal 里添加的 key 名
-      app_store_connect: <你的_AppStoreConnect_API_Key_名称>
+      # 已启用「App Store Connect API Key 自动签名」：
+      # youdake-asc = 你在 Codemagic Team settings > Team integrations > Developer Portal 里添加的 key 名
+      app_store_connect: youdake-asc
     environment:
       flutter: 3.41.4                   # 与项目 README/AGENTS.md 要求一致
       xcode: latest                     # 构建机最新稳定 Xcode
