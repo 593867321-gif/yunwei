@@ -91,12 +91,25 @@ workflows:
 
       - name: 构建 release IPA
         script: |
-          # 用 --dart-define 从环境变量逐个注入，不再依赖 env_release.json 明文文件。
-          # 这 4 个变量来自 Codemagic 控制台该 App 的 Environment variables（App 级加密变量）。
+          # 🔴 ENV / API_HOST 直接写死，不读控制台变量。
+          # 原因（实测踩坑）：首次构建产出的 IPA 里，二进制中 `youdake.com/team` 与默认的
+          # `youdake.cn/team` 都是 0 次命中，而源码硬编码的 `oss.youdake.com` 能搜到，
+          # 证明不是搜索方法问题，而是 API_HOST 被定义为「空字符串」。
+          # Dart 的 String.fromEnvironment 语义：只要 key 被 --dart-define 定义过，
+          # 即使值为空也不会回落到 defaultValue，于是 Env.ROOT_URL 变成 ""，
+          # 装上后所有接口请求都会失败（登录不上）。
+          # 这两个值不是机密（AGENTS.md 与 env_release.json 里本就是明文），写死最稳。
+          #
+          # 🔴 PUSH_APP_KEY / PUSH_APP_SECRET 是机密，仍从控制台加密变量注入，绝不写进仓库。
+          # 下面只打印「长度」用于诊断变量是否为空，不输出值本身。
+          echo "诊断（只看长度，不输出值）: PUSH_APP_KEY len=${#PUSH_APP_KEY}, PUSH_APP_SECRET len=${#PUSH_APP_SECRET}"
+          if [ "${#PUSH_APP_KEY}" -eq 0 ] || [ "${#PUSH_APP_SECRET}" -eq 0 ]; then
+            echo "⚠️ 警告：推送密钥变量为空，构建会继续，但装出的包收不到推送。请到控制台 Environment variables 重新填写这两个值。"
+          fi
           flutter build ipa --release \
             --export-options-plist=$HOME/export_options.plist \
-            --dart-define=ENV=$ENV \
-            --dart-define=API_HOST=$API_HOST \
+            --dart-define=ENV=release \
+            --dart-define=API_HOST=https://youdake.com/team/ \
             --dart-define=PUSH_APP_KEY=$PUSH_APP_KEY \
             --dart-define=PUSH_APP_SECRET=$PUSH_APP_SECRET
     artifacts:
