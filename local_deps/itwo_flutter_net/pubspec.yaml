@@ -1,0 +1,12 @@
+name: itwo_flutter_net
+description: Functional replacement of the private itwo_flutter_net package (original repo unreachable, HTTP 403). Provides DioLogInterceptor.
+version: 0.0.0-replacement
+publish_to: none
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.0.0

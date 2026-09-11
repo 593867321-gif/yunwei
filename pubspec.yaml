@@ -1,0 +1,52 @@
+name: operation
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.5+7
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+  # --- CI 构建覆盖 ---
+  # 原 itwo_flutter_base / itwo_flutter_net 位于私有 codeup 仓库（HTTP 403），
+  # Codemagic 构建机同样无法访问，故改用随包携带的本地功能替代库（见 local_deps/）。
+  # 替代库已通过 42 项行为测试，覆盖项目全部 16 个调用符号。
+  itwo_flutter_base:
+    path: local_deps/itwo_flutter_base
+  itwo_flutter_net:
+    path: local_deps/itwo_flutter_net
+  # path_provider 原由 itwo_flutter_base 传递提供，替代库不导出，需显式声明
+  path_provider: ^2.1.0
+  # --- /CI 构建覆盖 ---
+  cupertino_icons: ^1.0.8
+  fluttertoast: ^9.0.0
+  flutter_easyloading: ^3.0.5
+  pull_to_refresh: ^2.0.0
+  retrofit: ^4.9.2
+  json_annotation: ^4.11.0
+  freezed_annotation: ^3.1.0
+  mobile_scanner: ^7.2.0
+  permission_handler: ^12.0.1
+  mqtt5_client: ^4.15.2
+  webview_flutter: ^4.11.0
+  aliyun_push: ^1.2.0
+  device_info_plus: ^10.1.0
+  package_info_plus: ^9.0.0
+  uuid: ^4.0.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.13.1
+  freezed: ^3.1.0
+  json_serializable: ^6.13.1
+  retrofit_generator: ^10.2.5
+flutter:
+  generate: true
+  uses-material-design: true

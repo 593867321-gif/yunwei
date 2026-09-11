@@ -1,0 +1,66 @@
+# =============================================================================
+#  CI 包专用 .gitignore —— 本目录用于推送到 GitHub/GitLab 供 Codemagic 构建
+#  与原项目 .gitignore 的差异见每节注释
+# =============================================================================
+
+# ---- Flutter / Dart 构建产物 ----
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter-plugins-dependencies.bak
+
+# ---- iOS 构建产物（CI 会重新生成）----
+ios/Pods/
+ios/.symlinks/
+ios/DerivedData/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Flutter/App.framework
+**/DerivedData/
+**/*.xcworkspace/xcuserdata/
+**/*.xcodeproj/xcuserdata/
+
+# ---- Android 构建产物 ----
+android/.gradle/
+android/local.properties
+android/app/build/
+android/build/
+android/app/debug/
+android/app/profile/
+android/app/release/
+*.iml
+
+# ---- 🔴 敏感配置：含 PUSH_APP_SECRET 等明文密钥，禁止入库 ----
+# CI 构建改由 Codemagic environment groups 注入这些值（见 codemagic.yaml）。
+# 若你坚持用 --dart-define-from-file 方式，需自行取消忽略并确保仓库为私有。
+env_dev.json
+env_testing.json
+env_release.json
+
+# ---- 🔴 密钥与证书：绝不入库 ----
+*.p12
+*.p8
+*.mobileprovision
+*.keystore
+*.jks
+key.properties
+ios/Runner/push_config.plist
+
+# ---- IDE / 系统 ----
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ---- 日志 ----
+*.log
+
+# ---- 注意：以下两项【故意不忽略】----
+# pubspec.lock：CI 构建提交 lock 可保证依赖版本可复现（与原项目策略不同，原项目忽略了它）
+# local_deps/：功能替代库，是本 CI 包能构建的关键，必须随仓库提交

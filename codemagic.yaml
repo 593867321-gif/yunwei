@@ -1,0 +1,97 @@
+# =============================================================================
+#  Codemagic 配置 —— 优达客运维端 iOS 正式版（IPA）构建
+#
+#  为什么需要它：本机是 Windows，无法运行 xcodebuild；Codemagic 提供 macOS 构建机。
+#  为什么自带 local_deps：原私有依赖 flutter_lib.git 返回 403，Codemagic 构建机同样
+#    无法访问，故仓库内自带功能替代库，pubspec.yaml 已改为 path 依赖指向它。
+#
+#  本文件已按 Codemagic 官方 iOS 签名文档（docs.codemagic.io/yaml-code-signing/signing-ios）
+#  的「distribution_type + bundle_identifier」方式编写。该方式下，证书与 profile 会在
+#  构建时自动获取并装入 keychain，无需手写 keychain initialize 等 CLI 命令。
+#
+#  使用前必须完成（详见《iOS-CI构建指引.md》第三节）：
+#    1. 在 Codemagic 控制台 Team settings 配置签名材料（二选一）：
+#       a) Developer Portal 绑定 App Store Connect API Key（推荐，可自动管理证书/profile）
+#       b) 手动上传 .p12 证书 + .mobileprovision profile
+#    2. 在下方 integrations 填入 App Store Connect 集成名（若走 a 方案）
+#    3. 把 <占位符> 全部替换为真实值
+# =============================================================================
+
+workflows:
+  ios-release:
+    name: 优达客运营 iOS 正式版
+    max_build_duration: 60
+    instance_type: mac_mini_m2          # Apple Silicon 构建机
+    integrations:
+      # 走「App Store Connect API Key 自动签名」时启用下一行，
+      # 名称 = 你在 Codemagic Team settings > Team integrations > Developer Portal 里添加的 key 名
+      app_store_connect: <你的_AppStoreConnect_API_Key_名称>
+    environment:
+      flutter: 3.41.4                   # 与项目 README/AGENTS.md 要求一致
+      xcode: latest                     # 构建机最新稳定 Xcode
+      cocoapods: default
+      # iOS 签名：distribution_type + bundle_identifier 两个字段必须成对出现。
+      # 用这种方式时，官方规定不得再配置 provisioning_profiles / certificates 字段。
+      ios_signing:
+        distribution_type: ad_hoc       # ad_hoc=内部分发(需登记设备UDID)；改 app_store 可走 TestFlight/上架
+        bundle_identifier: com.youdake.operation.ios
+      # 🔴 后端地址与推送密钥不入库、不经过任何人，只从 Codemagic 加密环境变量注入。
+      # 你需要在 Codemagic 控制台 Environment variables 新建一个名为 youdake_env 的组，
+      # 勾选 Secure，填入 4 个变量（值见 .env.ci.template 模板）：
+      #   ENV=release  API_HOST=...  PUSH_APP_KEY=...  PUSH_APP_SECRET=...
+      groups:
+        - youdake_env
+    cache:
+      cache_paths:
+        - ~/.pub-cache
+        - $HOME/Library/Caches/CocoaPods
+    scripts:
+      - name: 配置国内镜像（加速 pub 下载；海外构建机可删除此步）
+        script: |
+          export PUB_HOSTED_URL="https://pub.flutter-io.cn"
+          export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
+
+      # 关键步骤：应用 provisioning profile 到 Xcode 工程，并生成 export_options.plist。
+      # 依赖上面的 ios_signing + integrations.app_store_connect 自动获取签名材料。
+      - name: 设置 Xcode 代码签名
+        script: xcode-project use-profiles
+
+      - name: 安装 Flutter 依赖（path 指向 local_deps 替代库）
+        script: flutter pub get
+
+      - name: 代码生成（@JsonSerializable/@RestApi/freezed，必须）
+        script: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: 生成本地化代码
+        script: flutter gen-l10n
+
+      - name: 安装 iOS 原生依赖（CocoaPods）
+        script: |
+          cd ios && pod install --repo-update && cd ..
+
+      - name: 构建 release IPA
+        script: |
+          # 用 --dart-define 从环境变量逐个注入，不再依赖 env_release.json 明文文件。
+          # 这 4 个变量来自上面 groups 引用的 youdake_env（在 Codemagic 控制台加密配置）。
+          flutter build ipa --release \
+            --export-options-plist=$HOME/export_options.plist \
+            --dart-define=ENV=$ENV \
+            --dart-define=API_HOST=$API_HOST \
+            --dart-define=PUSH_APP_KEY=$PUSH_APP_KEY \
+            --dart-define=PUSH_APP_SECRET=$PUSH_APP_SECRET
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      email:
+        recipients:
+          - <你的邮箱>                  # 构建结果通知
+        notify:
+          success: true
+          failure: true
+      # 可选：上传蒲公英（与项目 build.sh 行为一致）。在控制台把 PGY 密钥配成环境变量后取消注释
+      # scripts:
+      #   post: |
+      #     IPA=$(ls build/ios/ipa/*.ipa | head -1)
+      #     curl -s -F "file=@$IPA" -F "uKey=$PGY_USER_KEY" -F "_api_key=$PGY_API_KEY" \
+      #       https://www.pgyer.com/apiv2/app/upload

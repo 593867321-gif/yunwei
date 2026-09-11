@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { width: 100%; height: 100%; background: #F8FAFC; }
+    #chart { width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+  <div id="chart"></div>
+  <script>
+    var chart = null;
+
+    function initChart() {
+      var dom = document.getElementById('chart');
+      if (chart) chart.dispose();
+      chart = echarts.init(dom, null, { renderer: 'canvas' });
+    }
+
+    function setChartData(title, unit, jsonData) {
+      if (!chart) initChart();
+      var raw = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;
+      var times = [];
+      var values = [];
+      var hasData = raw && raw.length > 0;
+
+      if (hasData) {
+        raw.forEach(function (d) {
+          times.push(new Date(d.ts).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }));
+          values.push(d.value);
+        });
+      }
+
+      chart.setOption({
+        title: {
+          text: title,
+          left: 'center',
+          top: 8,
+          textStyle: { fontSize: 14, fontWeight: 700, color: '#1E293B' }
+        },
+        grid: { top: 44, right: 24, bottom: 36, left: 56 },
+        xAxis: {
+          type: 'category',
+          data: hasData ? times : ['--'],
+          axisLine: { lineStyle: { color: '#CBD5E1' } },
+          axisLabel: { color: '#64748B', fontSize: 11 },
+          axisTick: { show: false }
+        },
+        yAxis: {
+          type: 'value',
+          name: unit,
+          nameTextStyle: { color: '#64748B', fontSize: 11 },
+          axisLine: { show: false },
+          axisTick: { show: false },
+          splitLine: { lineStyle: { color: '#F1F5F9' } },
+          axisLabel: { color: '#64748B', fontSize: 11 }
+        },
+        tooltip: {
+          trigger: 'axis',
+          formatter: function (params) {
+            var p = params[0];
+            return p.axisValueLabel + '<br/>' + title + '：' + p.value + ' ' + unit;
+          }
+        },
+        series: [{
+          type: 'line',
+          data: hasData ? values : [],
+          smooth: true,
+          showSymbol: false,
+          lineStyle: { color: '#3B82F6', width: 2 },
+          areaStyle: hasData ? { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(59,130,246,0.12)' },
+            { offset: 1, color: 'rgba(59,130,246,0.01)' }
+          ]) } : undefined
+        }]
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      initChart();
+      chart.setOption({
+        title: {
+          text: '加载中...',
+          left: 'center',
+          top: '40%',
+          textStyle: { fontSize: 14, color: '#94A3B8' }
+        },
+        grid: { show: false },
+        xAxis: { show: false },
+        yAxis: { show: false },
+        series: []
+      });
+    });
+
+    window.addEventListener('resize', function () {
+      if (chart) chart.resize();
+    });
+  </script>
+</body>
+</html>

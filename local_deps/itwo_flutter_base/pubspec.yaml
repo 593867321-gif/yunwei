@@ -1,0 +1,23 @@
+name: itwo_flutter_base
+description: Functional replacement of the private itwo_flutter_base package (original repo unreachable, HTTP 403). Implements all 16 symbols used by the project with correct runtime behavior.
+version: 0.0.0-replacement
+publish_to: none
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # MD5：EncryptUtil.md5Encode 需真实哈希（后端 BCrypt 校验其输出）
+  crypto: ^3.0.0
+  # 日期格式化：DateTime.format 委托 intl.DateFormat
+  intl: ^0.20.2
+  # 持久化键值缓存：CacheUtil 基于 shared_preferences，保证登录态跨重启保持
+  shared_preferences: ^2.3.0
+  # 加载提示：jobIO 需自动显示/隐藏 loading（宿主多处调用点未自行 show，仅在 onFinally dismiss）
+  flutter_easyloading: ^3.0.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

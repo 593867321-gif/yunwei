@@ -1,0 +1,1121 @@
+{
+  "@@locale": "zh",
+
+  "appTitle": "优达客运营",
+
+  "loginAccountLabel": "账号",
+  "@loginAccountLabel": {
+    "description": "登录页账号输入框标签"
+  },
+  "loginAccountHint": "请输入账号",
+  "@loginAccountHint": {
+    "description": "登录页账号输入框占位文本"
+  },
+  "loginPasswordLabel": "密码",
+  "@loginPasswordLabel": {
+    "description": "登录页密码输入框标签"
+  },
+  "loginPasswordHint": "请输入密码",
+  "@loginPasswordHint": {
+    "description": "登录页密码输入框占位文本"
+  },
+  "loginButton": "登录",
+  "@loginButton": {
+    "description": "登录按钮文本"
+  },
+  "loginWelcomeBack": "欢迎回来",
+  "@loginWelcomeBack": {
+    "description": "登录页欢迎回来文案"
+  },
+  "loginPleaseSignIn": "请登录以继续",
+  "@loginPleaseSignIn": {
+    "description": "登录页副标题"
+  },
+  "loginErrorEmpty": "请输入账号和密码",
+  "@loginErrorEmpty": {
+    "description": "账号密码为空时的提示"
+  },
+  "loginErrorFailed": "登录失败",
+  "@loginErrorFailed": {
+    "description": "登录失败时的提示"
+  },
+
+  "homePageTitle": "运维工作台",
+  "@homePageTitle": {
+    "description": "首页顶部标题"
+  },
+  "homeWelcomeBack": "欢迎回来，{userName}",
+  "@homeWelcomeBack": {
+    "description": "首页欢迎语，带用户名",
+    "placeholders": {
+      "userName": {
+        "type": "String",
+        "example": "系统管理员"
+      }
+    }
+  },
+  "homeDomainLabel": "管理域：{domain}",
+  "@homeDomainLabel": {
+    "description": "首页管理域标签",
+    "placeholders": {
+      "domain": {
+        "type": "String",
+        "example": "全部设备"
+      }
+    }
+  },
+  "homeStatTodayOrders": "今日订单数",
+  "@homeStatTodayOrders": {
+    "description": "首页统计-今日订单数"
+  },
+  "homeStatTodayRevenue": "今日营业额",
+  "@homeStatTodayRevenue": {
+    "description": "首页统计-今日营业额"
+  },
+  "homeStatOtherPay": "其他支付收入",
+  "@homeStatOtherPay": {
+    "description": "首页统计-其他支付收入（除余额外的支付方式，当前为微信）"
+  },
+  "homeStatBalancePay": "用户余额支付",
+  "@homeStatBalancePay": {
+    "description": "首页统计-用户余额支付实收收入"
+  },
+  "homeStatAmountUnit": "元",
+  "@homeStatAmountUnit": {
+    "description": "首页统计-金额单位（数值保留一位小数，如 8888.8 元）"
+  },
+  "homeStatOrderUnit": "单",
+  "@homeStatOrderUnit": {
+    "description": "首页统计-订单/工单数量单位"
+  },
+  "homeDeviceStatusOnline": "在线设备",
+  "@homeDeviceStatusOnline": {
+    "description": "首页设备状态-在线设备"
+  },
+  "homeDeviceStatusAlert": "库存预警",
+  "@homeDeviceStatusAlert": {
+    "description": "首页设备状态-库存预警"
+  },
+  "homeMenuInventory": "库存管理",
+  "@homeMenuInventory": {
+    "description": "业务功能-库存管理"
+  },
+  "homeMenuScan": "扫一扫",
+  "@homeMenuScan": {
+    "description": "业务功能-扫一扫"
+  },
+  "homeMenuDevices": "设备列表",
+  "@homeMenuDevices": {
+    "description": "业务功能-设备列表"
+  },
+  "homeMenuOrders": "订单记录",
+  "@homeMenuOrders": {
+    "description": "业务功能-订单记录"
+  },
+  "homeMenuRepair": "故障维修",
+  "@homeMenuRepair": {
+    "description": "业务功能-故障维修"
+  },
+  "homeMenuReport": "报表数据",
+  "@homeMenuReport": {
+    "description": "业务功能-报表数据"
+  },
+  "homeBusinessTitle": "业务功能",
+  "@homeBusinessTitle": {
+    "description": "业务功能区域标题"
+  },
+  "homeAlertTitle": "即时预警",
+  "@homeAlertTitle": {
+    "description": "即时预警区域标题"
+  },
+  "homeScanFailed": "扫码失败",
+  "@homeScanFailed": {
+    "description": "扫码失败提示"
+  },
+  "homeCameraPermission": "相机权限",
+  "@homeCameraPermission": {
+    "description": "相机权限名称"
+  },
+  "homeSystemAdmin": "系统管理员",
+  "@homeSystemAdmin": {
+    "description": "默认用户名"
+  },
+  "homeAllDevices": "全部设备",
+  "@homeAllDevices": {
+    "description": "默认管理域标签"
+  },
+
+  "stockPageTitle": "库存管理",
+  "@stockPageTitle": {
+    "description": "库存管理页面标题"
+  },
+  "stockSelectDeviceFirst": "请先选择一台设备",
+  "@stockSelectDeviceFirst": {
+    "description": "未选择设备时的提示"
+  },
+  "stockSelectDeviceHint": "库存管理需要选择具体设备",
+  "@stockSelectDeviceHint": {
+    "description": "库存管理需要选择具体设备的提示"
+  },
+  "stockSelectDeviceButton": "选择设备",
+  "@stockSelectDeviceButton": {
+    "description": "选择设备按钮"
+  },
+  "stockTotalCount": "共 {count} 项",
+  "@stockTotalCount": {
+    "description": "库存列表头部计数",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "stockEmptyHint": "暂无库存数据",
+  "@stockEmptyHint": {
+    "description": "库存列表为空时的提示"
+  },
+  "stockModeCloudCalc": "云端计算",
+  "@stockModeCloudCalc": {
+    "description": "库存模式-云端计算"
+  },
+  "stockModeHwCollect": "硬件采集",
+  "@stockModeHwCollect": {
+    "description": "库存模式-硬件采集"
+  },
+  "stockModeHwCalc": "设备计算",
+  "@stockModeHwCalc": {
+    "description": "库存模式-设备计算"
+  },
+  "stockModeUnknown": "未知",
+  "@stockModeUnknown": {
+    "description": "库存模式-未知"
+  },
+  "stockModeInfinite": "无限",
+  "@stockModeInfinite": {
+    "description": "库存模式-无限"
+  },
+  "stockMaterialCup": "杯子",
+  "@stockMaterialCup": {
+    "description": "物料类型-杯子"
+  },
+  "stockMaterialCap": "盖子",
+  "@stockMaterialCap": {
+    "description": "物料类型-盖子"
+  },
+  "stockMaterialMilk": "牛奶",
+  "@stockMaterialMilk": {
+    "description": "物料类型-牛奶"
+  },
+  "stockMaterialCoffeeBean": "咖啡豆",
+  "@stockMaterialCoffeeBean": {
+    "description": "物料类型-咖啡豆"
+  },
+  "stockMaterialWater": "水",
+  "@stockMaterialWater": {
+    "description": "物料类型-水"
+  },
+  "stockMaterialSyrup": "糖浆",
+  "@stockMaterialSyrup": {
+    "description": "物料类型-糖浆"
+  },
+  "stockMaterialCO2": "二氧化碳",
+  "@stockMaterialCO2": {
+    "description": "物料类型-二氧化碳"
+  },
+  "stockChanged": "已修改",
+  "@stockChanged": {
+    "description": "库存变更标记"
+  },
+  "stockNoMaterial": "未绑定物料",
+  "@stockNoMaterial": {
+    "description": "未绑定物料的占位文本"
+  },
+  "stockChangeMaterial": "更换物料",
+  "@stockChangeMaterial": {
+    "description": "更换物料按钮"
+  },
+  "stockEdit": "修改库存",
+  "@stockEdit": {
+    "description": "修改库存操作文本"
+  },
+  "stockReplenish": "补货",
+  "@stockReplenish": {
+    "description": "补货操作文本"
+  },
+  "stockCurrentStock": "当前库存：{value} {unit}",
+  "@stockCurrentStock": {
+    "description": "当前库存显示",
+    "placeholders": {
+      "value": {
+        "type": "int",
+        "example": "10"
+      },
+      "unit": {
+        "type": "String",
+        "example": "个"
+      }
+    }
+  },
+  "stockMaxStock": "最大容量：{value} {unit}",
+  "@stockMaxStock": {
+    "description": "最大容量显示",
+    "placeholders": {
+      "value": {
+        "type": "int",
+        "example": "100"
+      },
+      "unit": {
+        "type": "String",
+        "example": "个"
+      }
+    }
+  },
+  "stockEditHint": "输入新的库存数量",
+  "@stockEditHint": {
+    "description": "修改库存弹窗提示"
+  },
+  "stockReplenishHint": "输入本次补货量",
+  "@stockReplenishHint": {
+    "description": "补货弹窗提示"
+  },
+  "stockInputHint": "请输入数量",
+  "@stockInputHint": {
+    "description": "库存编辑-数量输入占位"
+  },
+  "stockOptionalHint": "选填，留空则仅记录操作",
+  "@stockOptionalHint": {
+    "description": "库存编辑-可选数量模式提示"
+  },
+  "stockInvalidNumber": "请输入有效数量",
+  "@stockInvalidNumber": {
+    "description": "无效数量提示"
+  },
+  "stockLoadingMaterials": "加载物料列表...",
+  "@stockLoadingMaterials": {
+    "description": "加载物料列表时的提示"
+  },
+  "stockPickMaterialTitle": "选择「{type}」物料",
+  "@stockPickMaterialTitle": {
+    "description": "物料选择弹窗标题",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "example": "杯子"
+      }
+    }
+  },
+  "stockCurrentMaterial": "当前：{name}",
+  "@stockCurrentMaterial": {
+    "description": "物料选择弹窗-当前物料",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "标准杯"
+      }
+    }
+  },
+  "stockCurrentMaterialNone": "无",
+  "@stockCurrentMaterialNone": {
+    "description": "物料选择弹窗-暂无物料"
+  },
+  "stockNoAvailableMaterial": "无可用物料",
+  "@stockNoAvailableMaterial": {
+    "description": "物料选择弹窗-无可用物料"
+  },
+  "stockUnknownMaterial": "未知物料",
+  "@stockUnknownMaterial": {
+    "description": "物料选择-未知物料"
+  },
+  "stockLoadMaterialsFailed": "物料加载失败，请重试",
+  "@stockLoadMaterialsFailed": {
+    "description": "物料加载失败提示"
+  },
+  "stockConfirmSubmit": "确认提交",
+  "@stockConfirmSubmit": {
+    "description": "确认提交标题"
+  },
+  "stockConfirmMessage": "即将提交 {count} 项库存变更，设备可能需要一定时间响应。",
+  "@stockConfirmMessage": {
+    "description": "确认提交消息",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "stockSyncing": "正在同步设备库存...",
+  "@stockSyncing": {
+    "description": "同步库存中的提示"
+  },
+  "stockUpdateSuccess": "库存更新成功",
+  "@stockUpdateSuccess": {
+    "description": "库存更新成功提示"
+  },
+  "stockUpdateFailed": "库存更新失败",
+  "@stockUpdateFailed": {
+    "description": "库存更新失败提示"
+  },
+  "stockSubmitButton": "提交补货（{count}项变更）",
+  "@stockSubmitButton": {
+    "description": "提交按钮带计数",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "stockNoChanges": "无变更项",
+  "@stockNoChanges": {
+    "description": "无变更时的按钮文本"
+  },
+  "stockUndo": "撤销",
+  "@stockUndo": {
+    "description": "撤销修改按钮"
+  },
+  "stockUnnamedComponent": "未命名组件",
+  "@stockUnnamedComponent": {
+    "description": "未命名组件的占位文本"
+  },
+  "stockSaveMode": "保存方式",
+  "@stockSaveMode": {
+    "description": "库存保存方式选择标签"
+  },
+  "stockLevelNormal": "库存充足",
+  "@stockLevelNormal": {
+    "description": "库存级别-库存充足（HW_COLLECT/UNKNOWN 模式状态值=2）"
+  },
+  "stockLevelLowStock": "需补货",
+  "@stockLevelLowStock": {
+    "description": "库存级别-需补货（HW_COLLECT/UNKNOWN 模式状态值=1）"
+  },
+  "stockLevelSoldOut": "售罄",
+  "@stockLevelSoldOut": {
+    "description": "库存级别-售罄（HW_COLLECT/UNKNOWN 模式状态值=0）"
+  },
+  "stockStatusRefillRecordOnly": "补货（仅记录）",
+  "@stockStatusRefillRecordOnly": {
+    "description": "HW_COLLECT/UNKNOWN 模式的补货按钮文案"
+  },
+  "stockRecordStatusModeHint": "状态值模式，仅记录流水",
+  "@stockRecordStatusModeHint": {
+    "description": "库存流水记录-HW_COLLECT/UNKNOWN 模式的预扣流水标注"
+  },
+
+  "drawerTitle": "选择管理域",
+  "@drawerTitle": {
+    "description": "设备抽屉标题"
+  },
+  "drawerSearchHint": "搜索设备名称或编号",
+  "@drawerSearchHint": {
+    "description": "设备抽屉搜索框占位文本"
+  },
+  "drawerAllDevices": "全部设备",
+  "@drawerAllDevices": {
+    "description": "设备抽屉-全部设备选项"
+  },
+  "drawerDefaultOperator": "运营商",
+  "@drawerDefaultOperator": {
+    "description": "设备抽屉-默认运营商名称"
+  },
+  "drawerDefaultStore": "店铺",
+  "@drawerDefaultStore": {
+    "description": "设备抽屉-默认店铺名称"
+  },
+  "drawerDefaultDevice": "设备",
+  "@drawerDefaultDevice": {
+    "description": "设备抽屉-默认设备名称"
+  },
+
+  "commonCancel": "取消",
+  "@commonCancel": {
+    "description": "通用取消按钮"
+  },
+  "commonConfirm": "确定",
+  "@commonConfirm": {
+    "description": "通用确定按钮"
+  },
+  "commonLogout": "退出登录",
+  "@commonLogout": {
+    "description": "退出登录按钮"
+  },
+  "commonLogoutConfirm": "确认退出登录吗？",
+  "@commonLogoutConfirm": {
+    "description": "退出登录确认提示"
+  },
+
+  "dialogScanSuccess": "扫码成功",
+  "@dialogScanSuccess": {
+    "description": "扫码成功弹窗标题"
+  },
+  "dialogScanCode": "二维码秘钥：{code}",
+  "@dialogScanCode": {
+    "description": "扫码成功弹窗-二维码秘钥",
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "dialogClose": "关闭",
+  "@dialogClose": {
+    "description": "弹窗关闭按钮"
+  },
+  "stockRecordTitle": "库存流水记录",
+  "@stockRecordTitle": {
+    "description": "库存记录页面标题"
+  },
+  "stockRecordAll": "全部",
+  "@stockRecordAll": {
+    "description": "库存记录筛选-全部"
+  },
+  "stockRecordRetry": "加载失败，点击重试",
+  "@stockRecordRetry": {
+    "description": "库存记录加载失败重试提示"
+  },
+  "stockRecordEmpty": "暂无库存变动记录",
+  "@stockRecordEmpty": {
+    "description": "库存记录空状态"
+  },
+
+  "deviceListTitle": "设备列表",
+  "@deviceListTitle": {
+    "description": "设备列表页面标题"
+  },
+  "deviceListSearchHint": "搜索设备名称/编号/型号",
+  "@deviceListSearchHint": {
+    "description": "设备列表搜索框占位文本"
+  },
+  "deviceListFilterAll": "全部",
+  "@deviceListFilterAll": {
+    "description": "设备列表筛选-全部"
+  },
+  "deviceListFilterOnline": "在线",
+  "@deviceListFilterOnline": {
+    "description": "设备列表筛选-在线"
+  },
+  "deviceListFilterOffline": "离线",
+  "@deviceListFilterOffline": {
+    "description": "设备列表筛选-离线"
+  },
+  "deviceListEmpty": "暂无设备数据",
+  "@deviceListEmpty": {
+    "description": "设备列表空状态提示"
+  },
+  "deviceListAlertMore": "+{count}",
+  "@deviceListAlertMore": {
+    "description": "设备列表告警/故障过多时的折叠计数",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "deviceListTotalCount": "共 {count} 台设备",
+  "@deviceListTotalCount": {
+    "description": "设备列表头部计数",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "25"
+      }
+    }
+  },
+  "deviceListSoldOut": "缺货",
+  "@deviceListSoldOut": {
+    "description": "设备列表-库存缺货标记"
+  },
+  "deviceListLowStock": "低库存",
+  "@deviceListLowStock": {
+    "description": "设备列表-低库存预警标记"
+  },
+  "deviceListColdWater": "冷水",
+  "@deviceListColdWater": {
+    "description": "设备列表-电气数据冷水温度前缀"
+  },
+  "deviceListNoAlert": "无故障报警",
+  "@deviceListNoAlert": {
+    "description": "设备列表-无故障告警时的占位文本"
+  },
+  "deviceListNoStockAlert": "无预警",
+  "@deviceListNoStockAlert": {
+    "description": "设备列表-无库存预警时的占位文本"
+  },
+  "deviceListBtnStock": "库存",
+  "@deviceListBtnStock": {
+    "description": "设备列表卡片-库存按钮"
+  },
+  "deviceListBtnStatus": "状态",
+  "@deviceListBtnStatus": {
+    "description": "设备列表卡片-状态按钮"
+  },
+  "deviceListBtnControl": "控制",
+  "@deviceListBtnControl": {
+    "description": "设备列表卡片-控制按钮"
+  },
+  "deviceListNoUnavailable": "无不可用组件",
+  "@deviceListNoUnavailable": {
+    "description": "设备列表卡片-无不可用组件"
+  },
+  "deviceDetailTitle": "设备详情",
+  "@deviceDetailTitle": {
+    "description": "设备详情页标题占位"
+  },
+  "deviceDetailSectionStatus": "运行状态",
+  "@deviceDetailSectionStatus": {
+    "description": "设备详情-运行状态区块标题"
+  },
+  "deviceDetailSectionPower": "电力参数",
+  "@deviceDetailSectionPower": {
+    "description": "设备详情-电力参数区块标题"
+  },
+  "deviceDetailSectionTemp": "温度参数",
+  "@deviceDetailSectionTemp": {
+    "description": "设备详情-温度参数区块标题"
+  },
+  "deviceDetailSectionWater": "水路参数",
+  "@deviceDetailSectionWater": {
+    "description": "设备详情-水路参数区块标题"
+  },
+  "deviceDetailSectionMilk": "奶路称重",
+  "@deviceDetailSectionMilk": {
+    "description": "设备详情-奶路称重区块标题"
+  },
+  "deviceDetailSectionAlert": "故障告警",
+  "@deviceDetailSectionAlert": {
+    "description": "设备详情-故障告警区块标题"
+  },
+  "deviceDetailSectionStockAlert": "库存预警",
+  "@deviceDetailSectionStockAlert": {
+    "description": "设备详情-库存预警区块标题"
+  },
+  "deviceDetailNoData": "暂无数据",
+  "@deviceDetailNoData": {
+    "description": "设备详情-无数据占位文本"
+  },
+  "deviceDetailNormal": "正常",
+  "@deviceDetailNormal": {
+    "description": "设备详情-系统缺水正常状态"
+  },
+  "deviceDetailWaterShortage": "缺水",
+  "@deviceDetailWaterShortage": {
+    "description": "设备详情-系统缺水告警状态"
+  },
+  "deviceDetailLabelDeviceCode": "设备编号",
+  "@deviceDetailLabelDeviceCode": {
+    "description": "设备详情-设备编号标签"
+  },
+  "deviceDetailLabelModel": "设备型号",
+  "@deviceDetailLabelModel": {
+    "description": "设备详情-设备型号标签"
+  },
+  "deviceOnlineEvents": "在线事件",
+  "@deviceOnlineEvents": {
+    "description": "设备详情-在线事件区块标题"
+  },
+  "deviceFaultHistory": "故障历史",
+  "@deviceFaultHistory": {
+    "description": "设备详情-故障历史区块标题"
+  },
+  "deviceOnline": "在线",
+  "@deviceOnline": {
+    "description": "设备详情-在线事件-在线标签"
+  },
+  "deviceOffline": "离线",
+  "@deviceOffline": {
+    "description": "设备详情-在线事件-离线标签"
+  },
+
+  "alertPageTitle": "告警列表",
+  "@alertPageTitle": {
+    "description": "告警列表页面标题"
+  },
+  "alertFilterAll": "全部",
+  "@alertFilterAll": {
+    "description": "告警筛选-全部"
+  },
+  "alertFilterFault": "故障",
+  "@alertFilterFault": {
+    "description": "告警筛选-设备故障"
+  },
+  "alertFilterWarning": "告警",
+  "@alertFilterWarning": {
+    "description": "告警筛选-设备告警"
+  },
+  "alertFilterStockOut": "缺货",
+  "@alertFilterStockOut": {
+    "description": "告警筛选-缺货预警"
+  },
+  "alertStatusNew": "新告警",
+  "@alertStatusNew": {
+    "description": "告警状态-新告警"
+  },
+  "alertStatusAcknowledged": "已确认",
+  "@alertStatusAcknowledged": {
+    "description": "告警状态-已确认"
+  },
+  "alertStatusResolved": "已消除",
+  "@alertStatusResolved": {
+    "description": "告警状态-已消除"
+  },
+  "alertTimeLabel": "时间",
+  "@alertTimeLabel": {
+    "description": "告警时间标签"
+  },
+  "alertOccurrenceCount": "发生 {count} 次",
+  "@alertOccurrenceCount": {
+    "description": "告警发生次数",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "alertTotalCount": "共 {count} 条告警",
+  "@alertTotalCount": {
+    "description": "告警列表头部计数",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "25"
+      }
+    }
+  },
+  "alertEmpty": "暂无告警记录",
+  "@alertEmpty": {
+    "description": "告警列表空状态"
+  },
+  "alertBtnAcknowledge": "确认",
+  "@alertBtnAcknowledge": {
+    "description": "告警操作-确认按钮"
+  },
+  "alertBtnResolve": "消除",
+  "@alertBtnResolve": {
+    "description": "告警操作-消除按钮"
+  },
+  "alertBatchTitle": "已选 {count} 项",
+  "@alertBatchTitle": {
+    "description": "告警批量操作栏标题",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "alertBatchAcknowledgeConfirm": "确认将 {count} 条告警标记为已确认？",
+  "@alertBatchAcknowledgeConfirm": {
+    "description": "告警批量确认提示",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "alertBatchResolveConfirm": "确认将 {count} 条告警标记为已消除？",
+  "@alertBatchResolveConfirm": {
+    "description": "告警批量消除提示",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "alertOperationSuccess": "操作成功",
+  "@alertOperationSuccess": {
+    "description": "告警操作成功提示"
+  },
+  "alertOperationFailed": "操作失败",
+  "@alertOperationFailed": {
+    "description": "告警操作失败提示"
+  },
+  "alertLoadedAll": "已加载全部告警",
+  "@alertLoadedAll": {
+    "description": "告警列表全部加载完成"
+  },
+
+  "homeAlertFaultCount": "故障",
+  "@homeAlertFaultCount": {
+    "description": "首页告警计数-故障"
+  },
+  "homeAlertWarningCount": "告警",
+  "@homeAlertWarningCount": {
+    "description": "首页告警计数-设备告警"
+  },
+  "homeAlertStockOutCount": "缺货",
+  "@homeAlertStockOutCount": {
+    "description": "首页告警计数-缺货"
+  },
+  "homeAlertViewAll": "查看全部",
+  "@homeAlertViewAll": {
+    "description": "首页告警区域-查看全部按钮"
+  },
+  "homeAlertNoAlerts": "暂无告警",
+  "@homeAlertNoAlerts": {
+    "description": "首页告警区域-无告警提示"
+  },
+
+  "orderCancelTitle": "取消工单",
+  "@orderCancelTitle": {
+    "description": "取消工单弹窗标题"
+  },
+  "orderCancelForceTitle": "强制取消工单",
+  "@orderCancelForceTitle": {
+    "description": "强制取消工单弹窗标题"
+  },
+  "orderCancelWarning": "制作中的工单无法确认原料是否已消耗，取消后不会退回原料库存",
+  "@orderCancelWarning": {
+    "description": "强制取消 MAKING 工单时的风险提示"
+  },
+  "orderCancelRiskConfirm": "我已了解风险，确认操作",
+  "@orderCancelRiskConfirm": {
+    "description": "强制取消时的风险确认勾选文案"
+  },
+  "orderCancelSubmit": "取消工单已提交",
+  "@orderCancelSubmit": {
+    "description": "取消工单提交成功提示"
+  },
+  "orderBatchCancelTitle": "批量取消工单",
+  "@orderBatchCancelTitle": {
+    "description": "批量取消弹窗标题"
+  },
+  "orderBatchCancelSubmit": "批量取消请求已提交",
+  "@orderBatchCancelSubmit": {
+    "description": "批量取消提交成功提示"
+  },
+  "orderDiscardSent": "丢杯指令已发送",
+  "@orderDiscardSent": {
+    "description": "丢杯指令已发送成功提示"
+  },
+  "orderViewStockRecords": "查看库存流水",
+  "@orderViewStockRecords": {
+    "description": "工单详情-查看关联库存流水按钮"
+  },
+  "orderCancelReason": "取消原因：{reason}",
+  "@orderCancelReason": {
+    "description": "取消原因展示格式",
+    "placeholders": {
+      "reason": {
+        "type": "String",
+        "example": "超时未取餐，系统已退款"
+      }
+    }
+  },
+  "remoteControlTitle": "远程控制",
+  "remoteControlIdle": "未控制",
+  "remoteControlControlling": "控制中",
+  "remoteControlOccupied": "已被控制",
+  "remoteControlAcquire": "申请控制权",
+  "remoteControlRelease": "释放",
+  "remoteControlStatusOverview": "设备状态总览",
+  "remoteControlOnline": "● 在线",
+  "remoteControlRunning": "运行中",
+  "remoteControlRelay": "继电器",
+  "remoteControlRobot": "机械臂",
+  "remoteControlDoorSection": "出餐门",
+  "remoteControlCupSection": "落杯",
+  "remoteControlLidSection": "落盖",
+  "remoteControlCoffeeSection": "咖啡机",
+  "remoteControlIceSection": "制冰",
+  "remoteControlJuiceSection": "果汁",
+  "remoteControlNeedControlHint": "请先申请控制权",
+  "remoteControlOpTargetArm": "目标臂",
+  "remoteControlOpActions": "动作",
+  "remoteControlOpLinkDoor": "联动",
+  "remoteControlOpCupMotor": "杯托",
+  "remoteControlOpFrontDoor": "前门",
+  "remoteControlOpMachine": "机号",
+  "remoteControlOpIceMode": "模式",
+  "remoteControlOpJuicePipe": "管路",
+  "remoteControlSensorData": "传感器数据",
+  "remoteControlSystemSection": "系统指令",
+  "remoteControlVersionSection": "固件版本",
+  "remoteControlQueryVersion": "查询版本",
+  "remoteControlExecuteClean": "执行清理",
+  "remoteControlReset": "复位",
+  "remoteControlRestart": "重启",
+  "remoteControlCleanAll": "全清",
+  "remoteControlCleanSpec": "指定",
+  "remoteControlArm1": "① 号臂",
+  "remoteControlArm2": "② 号臂",
+  "remoteControlNoData": "暂无数据",
+
+  "remoteControlTooltip": "远程控制",
+
+  "remoteControlRelayFan": "风扇",
+  "remoteControlRelayHeater": "加热",
+  "remoteControlRelayCooler": "制冷",
+  "remoteControlRelayLight": "照明",
+  "remoteControlRelayPump": "水泵",
+  "remoteControlRelayCompressor": "压缩机",
+
+  "remoteControlArmReset": "复位",
+  "remoteControlArmEnable": "上使能",
+  "remoteControlArmDisable": "下使能",
+  "remoteControlArmRun": "运行程序",
+  "remoteControlArmStop": "停止",
+  "remoteControlArmDragEnter": "进入拖拽",
+  "remoteControlArmDragExit": "退出拖拽",
+  "remoteControlArmContinue": "压盖位继续",
+  "remoteControlArmDropOrigin": "原点丢杯",
+  "remoteControlArmDropCache": "缓存丢杯",
+  "remoteControlArmDropOutlet": "出杯口丢杯",
+  "remoteControlArmSelectAction": "选择动作",
+  "remoteControlArmSelectActionHint": "请先选择机械臂动作",
+  "remoteControlArmStart": "启动",
+  "remoteControlParamNone": "不涉及",
+  "remoteControlConfirmTitle": "确认操作",
+  "remoteControlConfirmMessage": "确认执行「{action}」？",
+  "@remoteControlConfirmMessage": {
+    "placeholders": {
+      "action": { "type": "String" }
+    }
+  },
+  "remoteControlConfirmOk": "确定",
+  "remoteControlConfirmCancel": "取消",
+
+  "remoteControlCoffeeBrew": "出咖啡",
+  "remoteControlCoffeeRinse": "润湿",
+  "remoteControlCupDispense": "落杯",
+  "remoteControlLidDispense": "落盖",
+  "remoteControlDoorOpen": "开门",
+  "remoteControlDoorClose": "关门",
+  "remoteControlIceStart": "启动",
+  "remoteControlIceWeightMode": "克重",
+  "remoteControlIceContinuousMode": "连续",
+  "remoteControlResetAction": "复位",
+
+  "remoteControlJuiceDispense": "果汁出料",
+  "remoteControlJuicePipe": "管{pipe}",
+  "@remoteControlJuicePipe": {
+    "placeholders": {
+      "pipe": { "type": "int" }
+    }
+  },
+  "remoteControlJuiceGramsHint": "克重",
+  "remoteControlJuiceStart": "出料",
+  "remoteControlJuiceInvalidParams": "管路或克重参数无效",
+  "remoteControlCmdSuccess": "{cmd} 成功",
+  "@remoteControlCmdSuccess": {
+    "placeholders": {
+      "cmd": { "type": "String" }
+    }
+  },
+  "remoteControlCmdFailed": "{cmd} 失败: {reason}",
+  "@remoteControlCmdFailed": {
+    "placeholders": {
+      "cmd": { "type": "String" },
+      "reason": { "type": "String" }
+    }
+  },
+  "remoteControlDropParams": "丢杯定位参数",
+  "remoteControlDropTarget": "丢杯目标",
+  "remoteControlDropTargetCoffee": "咖啡位",
+  "remoteControlDropTargetCache1": "缓存1",
+  "remoteControlDropTargetCache2": "缓存2",
+  "remoteControlDropTargetCache3": "缓存3",
+  "remoteControlDropCupOut": "出餐门",
+  "remoteControlDropCacheDiscard": "缓存位",
+  "remoteControlCache1": "缓存1",
+  "remoteControlCache2": "缓存2",
+  "remoteControlCache3": "缓存3",
+  "remoteControlCache4": "缓存4",
+  "remoteControlCacheN": "缓存{n}",
+  "@remoteControlCacheN": {
+    "placeholders": {
+      "n": { "type": "int" }
+    }
+  },
+  "remoteControlCleanDoor": "清理门号",
+  "remoteControlCleanCache": "清理缓存位",
+  "remoteControlCleanCacheNone": "不限缓存",
+  "remoteControlReasonNotController": "非当前控制者",
+  "remoteControlReasonOccupied": "控制权已被占用",
+  "remoteControlReasonInvalidParams": "参数无效",
+  "remoteControlReasonSlaveNoResponse": "下位机无响应",
+  "remoteControlReasonUnknownCmd": "未知指令",
+  "remoteControlReasonAckTimeout": "指令超时无响应",
+  "remoteControlForceRelease": "强制释放",
+  "remoteControlQueryControl": "查询控制权",
+  "remoteControlControllerLabel": "控制者: {cId}",
+  "@remoteControlControllerLabel": {
+    "placeholders": {
+      "cId": { "type": "String" }
+    }
+  },
+  "remoteControlViewersLabel": "查看者: {cIds}",
+  "@remoteControlViewersLabel": {
+    "placeholders": {
+      "cIds": { "type": "String" }
+    }
+  },
+  "remoteControlCupMotorOpen": "杯托开",
+  "remoteControlCupMotorClose": "杯托关",
+  "remoteControlFrontDoorOpen": "前门开",
+  "remoteControlFrontDoorClose": "前门关",
+  "remoteControlCoffeeMachine": "机{n}",
+  "@remoteControlCoffeeMachine": {
+    "placeholders": {
+      "n": { "type": "int" }
+    }
+  },
+  "remoteControlMqttOn": "本机MQTT已连",
+  "remoteControlMqttOff": "本机MQTT未连",
+  "remoteControlRelayAllOn": "全开",
+  "remoteControlRelayAllOff": "全关",
+  "remoteControlRelayTableFan": "底仓通风",
+  "remoteControlRelayCoffeePower": "咖啡机电源",
+  "remoteControlRelayIcePower": "制冰机电源",
+  "remoteControlRelayRobotPower": "机械臂电源",
+  "remoteControlRelayAirPower": "空调电源",
+  "remoteControlRelayLightPower": "照明",
+  "remoteControlRelayAdPower": "信息屏",
+  "remoteControlRelayBubblePower": "气泡机电源",
+  "remoteControlRelayWaterPumpIn": "供水泵",
+  "remoteControlRelayWaterPumpOut": "排水泵",
+  "remoteControlRelayValve1": "进水阀1",
+  "remoteControlRelayValve2": "进水阀2",
+  "remoteControlRelayValve3": "进水阀3",
+  "remoteControlRelayJuiceFan": "果汁散热风扇",
+  "remoteControlRelayWaterWaste": "排废水阀",
+  "remoteControlRelayDxkw": "电伴热",
+  "remoteControlRelayLightColor": "七彩灯",
+
+  "remoteControlSensorVoltage": "电压",
+  "remoteControlSensorCurrent": "电流",
+  "remoteControlSensorPower": "功率",
+  "remoteControlSensorBottomTemp": "底仓温度",
+  "remoteControlSensorTopTemp": "上仓温度",
+  "remoteControlSensorColdTemp": "冷水温度",
+  "remoteControlSensorIceTemp": "冰藏温度",
+  "remoteControlSensorWaterUsage": "用水量",
+  "remoteControlSensorWaterPressure": "水压",
+  "remoteControlSensorTDS": "TDS",
+  "remoteControlSensorWaterShortage": "缺水",
+
+  "remoteControlDoor1": "门1",
+  "remoteControlDoor2": "门2",
+  "remoteControlDoor3": "门3",
+  "remoteControlDoor4": "门4",
+  "remoteControlCupPos1": "落杯位1",
+  "remoteControlCupPos2": "落杯位2",
+  "remoteControlLidPos1": "落盖位1",
+  "remoteControlLidPos2": "落盖位2",
+
+  "remoteControlCupLidCup": "杯位",
+  "remoteControlCupLidLid": "盖位",
+  "remoteControlCupLidPresent": "在位",
+  "remoteControlCupLidEmpty": "缺料",
+  "remoteControlCupLidFault": "故障",
+
+  "remoteControlStockCups": "杯子余量",
+  "remoteControlStockLids": "杯盖余量",
+  "remoteControlStockJuice": "果汁余量",
+  "remoteControlStockWater": "水桶余量",
+  "remoteControlStockJuiceChannel": "管路{ch}",
+
+  "remoteControlBubble": "气泡机",
+  "remoteControlJuice": "果汁机",
+  "remoteControlWaterHot": "热水",
+  "remoteControlDrop": "丢杯口",
+  "remoteControlOrderFlow": "订单流程",
+  "remoteControlCache": "缓存位",
+  "remoteControlDoorOrder": "出餐门订单",
+  "remoteControlModuleLink": "模块通讯",
+  "remoteControlModuleOnline": "{n}/{total} 在线",
+
+  "pushFaultAlertTitle": "[故障]",
+  "pushWarningAlertTitle": "[告警]",
+  "pushStockOutAlertTitle": "[缺货]",
+  "pushAlertResolvedTitle": "[已恢复]",
+
+  "pushNotificationPermissionDenied": "通知权限已被永久拒绝",
+  "@pushNotificationPermissionDenied": {
+    "description": "通知权限永久拒绝时的提示"
+  },
+  "pushNotificationPermissionGuide": "请前往系统设置开启通知权限",
+  "@pushNotificationPermissionGuide": {
+    "description": "引导用户前往系统设置的提示"
+  },
+  "pushNotificationPermissionOpenSettings": "去设置",
+  "@pushNotificationPermissionOpenSettings": {
+    "description": "打开系统设置按钮"
+  },
+
+  "networkTimeout": "网络连接超时，请检查网络设置",
+  "@networkTimeout": {
+    "description": "网络超时错误提示"
+  },
+  "networkBadCertificate": "网络证书校验失败",
+  "@networkBadCertificate": {
+    "description": "网络证书错误提示"
+  },
+  "networkError400": "错误的请求 (400)",
+  "@networkError400": {
+    "description": "HTTP 400 错误提示"
+  },
+  "networkError401": "登录已过期，请重新登录",
+  "@networkError401": {
+    "description": "HTTP 401 错误提示"
+  },
+  "networkError403": "拒绝访问 (403)",
+  "@networkError403": {
+    "description": "HTTP 403 错误提示"
+  },
+  "networkError404": "请求资源不存在 (404)",
+  "@networkError404": {
+    "description": "HTTP 404 错误提示"
+  },
+  "networkError500": "服务器内部错误 (500)",
+  "@networkError500": {
+    "description": "HTTP 500 错误提示"
+  },
+  "networkError502": "服务器正在维护或网关错误 (502)",
+  "@networkError502": {
+    "description": "HTTP 502 错误提示"
+  },
+  "networkError503": "服务暂时不可用 (503)",
+  "@networkError503": {
+    "description": "HTTP 503 错误提示"
+  },
+  "networkErrorDefault": "服务器响应异常 ({code})",
+  "@networkErrorDefault": {
+    "description": "HTTP 其他错误提示",
+    "placeholders": {
+      "code": {
+        "type": "int",
+        "example": "500"
+      }
+    }
+  },
+  "networkRequestCancelled": "请求已取消",
+  "@networkRequestCancelled": {
+    "description": "请求取消提示"
+  },
+  "networkConnectionError": "无法连接到服务器，请检查网络",
+  "@networkConnectionError": {
+    "description": "连接错误提示"
+  },
+  "networkSocketError": "网络不可用，请检查连接",
+  "@networkSocketError": {
+    "description": "Socket 错误提示"
+  },
+  "networkUnknownError": "未知网络错误",
+  "@networkUnknownError": {
+    "description": "未知网络错误提示"
+  },
+  "networkRequestFailed": "网络请求失败，请稍后重试",
+  "@networkRequestFailed": {
+    "description": "网络请求失败提示"
+  },
+  "authExpired": "登录已过期，请重新登录",
+  "@authExpired": {
+    "description": "登录过期提示"
+  }
+}
