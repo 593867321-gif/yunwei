@@ -202,7 +202,13 @@ Future<dynamic> jobIO(Future<dynamic> Function() task, {bool Function(dynamic er
 
 /// 执行一次 [task]，吞掉全部异常返回 null（「轻」封装：不显示 loading、不弹 toast）。
 /// 用于不需要界面反馈的轻量调用；宿主如需 loading 自行 EasyLoading.show(status:)。
-Future<dynamic> trySingle(Future<dynamic> Function() task) async {
+///
+/// 关键步骤：必须用泛型 [T] 保留 task 的返回类型，禁止写成 Future<dynamic>。
+/// 原因：宿主代码会在返回值上直接调用扩展方法（如 page_home.dart 扫码分支的
+/// `result.isNullOrEmpty`）。扩展方法是静态解析的，若静态类型为 dynamic，
+/// Dart 会改成实例方法查找，运行时抛 NoSuchMethodError；而该异常发生在无人
+/// await 的 async 回调里会被静默吞掉，表现为「后续代码（含弹窗）整段不执行」。
+Future<T?> trySingle<T>(Future<T?> Function() task) async {
   try {
     return await task();
   } catch (_) {
