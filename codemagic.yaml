@@ -30,12 +30,25 @@ workflows:
       flutter: 3.41.4                   # 与项目 README/AGENTS.md 要求一致
       xcode: latest                     # 构建机最新稳定 Xcode
       cocoapods: default
-      # 🔴 此处刻意【不】配置 ios_signing（distribution_type + bundle_identifier）。
-      # 原因：配置后 Codemagic 会在构建启动时强制自动拉取签名材料，
-      # 一旦 Apple 账号里没有现成的 Ad Hoc 描述文件，构建会立即报错中止
-      # （"No matching profiles found ... distribution type ad_hoc"），
-      # 后面的脚本步骤（含自动创建）根本没有机会执行。
-      # 改为在下方脚本里用 app-store-connect fetch-signing-files --create 主动获取/创建。
+      # iOS 签名：采用「引用名」方式（provisioning_profiles + certificates）。
+      #
+      # 🔴 为什么不用 distribution_type + bundle_identifier 自动拉取：
+      #   Apple 账号里唯一的分发证书是 "Distribution Managed"（Xcode Cloud 云端托管证书），
+      #   其私钥由 Apple 保管、任何人无法下载。自动拉取会得到一张无私钥的证书并中止：
+      #   "Cannot save Signing Certificates without certificate private key"。
+      #   官方规定：用引用名方式时，不得再配置 distribution_type / bundle_identifier。
+      #
+      # 前置准备（在控制台完成，详见 README）：
+      #   1) Team settings > Code signing identities > iOS certificates > Generate certificate
+      #      类型选 Apple Distribution，使用 API Key youdake-asc；下载 .p12（仅此一次）
+      #   2) 同页 Upload certificate 上传该 .p12，引用名必须为 youdake_dist
+      #   3) Apple 后台 Profiles 新建 Ad Hoc 描述文件（选该证书 + 全部 6 台设备），
+      #      下载 .mobileprovision，上传到 iOS provisioning profiles，引用名必须为 youdake_adhoc
+      ios_signing:
+        provisioning_profiles:
+          - youdake_adhoc
+        certificates:
+          - youdake_dist
       # 🔴 后端地址与推送密钥不入库、不经过任何人，只从 Codemagic 加密环境变量注入。
       # 在 Codemagic 该 App 的 Environment variables 里直接添加 4 个 App 级变量（勾 Secret）：
       #   ENV=release  API_HOST=...  PUSH_APP_KEY=...  PUSH_APP_SECRET=...
@@ -50,30 +63,18 @@ workflows:
           export PUB_HOSTED_URL="https://pub.flutter-io.cn"
           export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
 
-      # 关键步骤：先从 Apple Developer Portal 获取/创建签名材料（证书 + provisioning profile）。
-      # --create 让 Codemagic 在 profile 不存在时自动创建，修复
-      # "No matching profiles found for bundle identifier ... and distribution type ad_hoc" 报错。
-      # 回退策略：Ad Hoc 必须至少登记一台设备，若没有设备 --create 仍会失败，
-      # 此时自动降级为 App Store（TestFlight）签名类型，它无需登记设备。
-      # 实际采用的签名类型写入 /tmp/youdake_signing_type 供后续步骤使用。
-      - name: 获取/创建签名证书与描述文件
-        script: |
-          keychain initialize
-          if app-store-connect fetch-signing-files "com.youdake.operation.ios" \
-              --type IOS_APP_ADHOC --create; then
-            echo "✅ 已获取/创建 Ad Hoc 签名材料（可下载 IPA 直接安装）"
-            echo "ad-hoc" > /tmp/youdake_signing_type
-          else
-            echo "⚠️ Ad Hoc 创建失败（通常是 Apple 账号未登记设备），自动降级为 App Store(TestFlight) 签名"
-            app-store-connect fetch-signing-files "com.youdake.operation.ios" \
-              --type IOS_APP_STORE --create
-            echo "app-store" > /tmp/youdake_signing_type
-          fi
-          keychain add-certificates
-      # 关键步骤：应用 provisioning profile 到 Xcode 工程，并生成 export_options.plist。
-      # --archive-method 限定只使用与当前签名类型匹配的 profile，避免套用错误类型。
+      # 说明：此处【不需要】keychain initialize / fetch-signing-files / keychain add-certificates。
+      # 采用引用名方式（ios_signing.provisioning_profiles + certificates）时，
+      # Codemagic 会在构建过程中自动把引用的证书与描述文件装入 keychain。
+      # 官方文档明确：Steps `Initialize keychain` & `Add certificates to keychain` are not required。
+      #
+      # 之前的 fetch-signing-files --create 必须移除：它会从 Apple 下载那张
+      # "Distribution Managed" 托管证书（私钥由 Apple 保管、无法下载），
+      # 必然报 "Cannot save Signing Certificates without certificate private key"。
       - name: 设置 Xcode 代码签名
-        script: xcode-project use-profiles --archive-method="$(cat /tmp/youdake_signing_type)"
+        # 把上面引用的 Ad Hoc 描述文件应用到 Xcode 工程，并生成 export_options.plist。
+        # --archive-method 限定只使用 ad-hoc 类型的 profile，避免套用错误类型。
+        script: xcode-project use-profiles --archive-method=ad-hoc
 
       - name: 安装 Flutter 依赖（path 指向 local_deps 替代库）
         script: flutter pub get
@@ -91,7 +92,7 @@ workflows:
       - name: 构建 release IPA
         script: |
           # 用 --dart-define 从环境变量逐个注入，不再依赖 env_release.json 明文文件。
-          # 这 4 个变量来自上面 groups 引用的 youdake_env（在 Codemagic 控制台加密配置）。
+          # 这 4 个变量来自 Codemagic 控制台该 App 的 Environment variables（App 级加密变量）。
           flutter build ipa --release \
             --export-options-plist=$HOME/export_options.plist \
             --dart-define=ENV=$ENV \
