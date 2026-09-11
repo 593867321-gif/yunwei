@@ -30,11 +30,12 @@ workflows:
       flutter: 3.41.4                   # 与项目 README/AGENTS.md 要求一致
       xcode: latest                     # 构建机最新稳定 Xcode
       cocoapods: default
-      # iOS 签名：distribution_type + bundle_identifier 两个字段必须成对出现。
-      # 用这种方式时，官方规定不得再配置 provisioning_profiles / certificates 字段。
-      ios_signing:
-        distribution_type: ad_hoc       # ad_hoc=内部分发(需登记设备UDID)；改 app_store 可走 TestFlight/上架
-        bundle_identifier: com.youdake.operation.ios
+      # 🔴 此处刻意【不】配置 ios_signing（distribution_type + bundle_identifier）。
+      # 原因：配置后 Codemagic 会在构建启动时强制自动拉取签名材料，
+      # 一旦 Apple 账号里没有现成的 Ad Hoc 描述文件，构建会立即报错中止
+      # （"No matching profiles found ... distribution type ad_hoc"），
+      # 后面的脚本步骤（含自动创建）根本没有机会执行。
+      # 改为在下方脚本里用 app-store-connect fetch-signing-files --create 主动获取/创建。
       # 🔴 后端地址与推送密钥不入库、不经过任何人，只从 Codemagic 加密环境变量注入。
       # 在 Codemagic 该 App 的 Environment variables 里直接添加 4 个 App 级变量（勾 Secret）：
       #   ENV=release  API_HOST=...  PUSH_APP_KEY=...  PUSH_APP_SECRET=...
@@ -49,10 +50,30 @@ workflows:
           export PUB_HOSTED_URL="https://pub.flutter-io.cn"
           export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
 
+      # 关键步骤：先从 Apple Developer Portal 获取/创建签名材料（证书 + provisioning profile）。
+      # --create 让 Codemagic 在 profile 不存在时自动创建，修复
+      # "No matching profiles found for bundle identifier ... and distribution type ad_hoc" 报错。
+      # 回退策略：Ad Hoc 必须至少登记一台设备，若没有设备 --create 仍会失败，
+      # 此时自动降级为 App Store（TestFlight）签名类型，它无需登记设备。
+      # 实际采用的签名类型写入 /tmp/youdake_signing_type 供后续步骤使用。
+      - name: 获取/创建签名证书与描述文件
+        script: |
+          keychain initialize
+          if app-store-connect fetch-signing-files "com.youdake.operation.ios" \
+              --type IOS_APP_ADHOC --create; then
+            echo "✅ 已获取/创建 Ad Hoc 签名材料（可下载 IPA 直接安装）"
+            echo "ad-hoc" > /tmp/youdake_signing_type
+          else
+            echo "⚠️ Ad Hoc 创建失败（通常是 Apple 账号未登记设备），自动降级为 App Store(TestFlight) 签名"
+            app-store-connect fetch-signing-files "com.youdake.operation.ios" \
+              --type IOS_APP_STORE --create
+            echo "app-store" > /tmp/youdake_signing_type
+          fi
+          keychain add-certificates
       # 关键步骤：应用 provisioning profile 到 Xcode 工程，并生成 export_options.plist。
-      # 依赖上面的 ios_signing + integrations.app_store_connect 自动获取签名材料。
+      # --archive-method 限定只使用与当前签名类型匹配的 profile，避免套用错误类型。
       - name: 设置 Xcode 代码签名
-        script: xcode-project use-profiles
+        script: xcode-project use-profiles --archive-method="$(cat /tmp/youdake_signing_type)"
 
       - name: 安装 Flutter 依赖（path 指向 local_deps 替代库）
         script: flutter pub get
