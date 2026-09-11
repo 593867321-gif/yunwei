@@ -28,6 +28,11 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>我们需要使用您的相机来扫描二维码进行登录</string>
+	<!-- 出口合规声明：本 App 仅使用系统标准 HTTPS/TLS 加密（属豁免类别），
+	     未自行实现非豁免加密算法，故为 false。
+	     不加此项的话，每次上传到 App Store Connect 都要手动回答出口合规问卷。 -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

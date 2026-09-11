@@ -196,9 +196,107 @@ ad-hoc 包**只能装到描述文件里包含的设备**。上述 6 台都已登
 
 ---
 
-## 八、风险提示（同 APK 指引，务必知悉）
+## 九、TestFlight 灰度分发（不上架 App Store）
 
-1. **替代库非官方原库**。`local_deps/` 里的 `itwo_flutter_base`/`itwo_flutter_net` 是我依据项目 195 处调用反推实现的，已过 50 项行为测试（42 项基础 + 8 项扫码弹窗回归）+ Android 真机验证（你反馈可用），但无法保证与原库 100% 一致。iOS 首次构建后，请重点验证：登录（MD5+BCrypt）、token 持久化（退出重进不掉登录）、**扫码成功弹「二维码秘钥」弹窗**、推送、首页看板与库存刷新。
+> 目标：让测试员通过 **TestFlight App** 安装，无需登记设备 UDID。
+> 走这条路**不需要** ICP 备案号——备案号是提审 App Store 上架时的必填字段，
+> TestFlight 走的是 Beta App Review，不填这一项。
+
+### 9.0 三种分发方式对比（先搞清楚为什么换）
+
+| 方式 | 受众 | 设备限制 | 审核 | 用哪个 workflow |
+|---|---|---|---|---|
+| Ad Hoc（现状） | 已登记 UDID 的设备 | **每年每类设备 100 台上限**，当前已用 6 台 | 无 | `ios-release` |
+| **TestFlight 内部** | App Store Connect 用户 | **100 人**，无需登记 UDID | **免审核** | `ios-testflight` |
+| **TestFlight 外部** | 任意 Apple ID | **10000 人**，可公开链接 | 首个构建过 Beta App Review（约 1-2 天） | `ios-testflight` |
+| App Store 上架 | 所有人 | 无 | 正式审核 + 需 ICP 备案号 | （本包未配置） |
+
+TestFlight 构建版本**自上传起最长可测 90 天**，过期需重新构建上传。
+
+### 9.1 为什么签名要换：Ad Hoc 与 App Store 描述文件不能混用
+
+`ios-testflight` 工作流用的描述文件是 **App Store 类型**（引用名 `youdake_appstore`），
+不是现有的 `youdake_adhoc`。证书可复用（同一张 `youdake_dist` 通用）。
+
+所以要做一次性的准备：**新建一个 App Store 类型描述文件并上传**。
+
+### 9.2 步骤 1：新建 App Store 描述文件（一次性，约 3 分钟）
+
+1. https://developer.apple.com/account/resources/profiles/list → **+**
+2. Distribution 下选 **App Store**（不是 Ad Hoc）→ Continue
+3. App ID 选 `com.youdake.operation.ios` → Continue
+4. Certificates 勾 **Apple Distribution**（那张到 2027-09-11 的；⚠️ 别选 `Distribution Managed`）→ Continue
+5. Profile Name 填如 `youdake operation appstore` → **Generate** → **Download**
+6. Codemagic → Team settings → Code signing identities → **iOS provisioning profiles** → 上传，
+   **Reference name 必须填 `youdake_appstore`**（与 yaml 一字不差）
+
+> 这一步是纯网页操作 + 文件上传，**不经过那个报 401 的 API 接口**，所以不会再撞权限问题。
+> 上传后看 Certificate 列有没有绿色对勾，没有说明证书没匹配上。
+
+### 9.3 步骤 2：App Store Connect 建测试组
+
+1. https://appstoreconnect.apple.com → 我的 App → **优达客运营**
+   （App 记录之前已建好：Bundle ID `com.youdake.operation.ios`、SKU `youdake-operation-ios`）
+2. 左侧 **TestFlight** 标签
+3. **内部测试**：建一个组（如 `内部测试`），把自己和同事的 App Store Connect 账号加进去（最多 100 人，**免审核，构建一上传就能装**）
+4. **外部测试**（可选）：建组后需填**测试信息**——
+   - 测试内容说明、反馈邮箱
+   - **隐私政策 URL**（外部测试必填，得是一个能公开访问的网址）
+   建好后最多 1 万名测试员，可用邮件邀请或**公开链接**分发。
+5. 记下组名，回到 `codemagic.yaml` 把 `ios-testflight` 里的 `beta_groups` 注释取消并填上组名：
+   ```yaml
+   beta_groups:
+     - 内部测试
+   ```
+   > 🔴 不填或填错组名，构建能成功但**不会自动分发给测试组**（得手动在 TestFlight 页把构建拖进组）。
+
+### 9.4 步骤 3：触发 TestFlight 构建
+
+1. push 最新配置（若还没推）
+2. Codemagic → yunwei app → **Start new build**
+3. branch `main`、workflow 选 **「优达客运营 iOS TestFlight 灰度」**（⚠️ 不是「正式版」那个，那个是 ad-hoc）
+4. 构建成功后，yaml 里的 `publishing.app_store_connect` 会**自动上传到 App Store Connect**
+
+上传后在 TestFlight 页看到构建版本，状态流转：
+`正在处理`（约 5-30 分钟）→ 内部测试可装 → 外部测试需等 Beta App Review 通过
+
+### 9.5 步骤 4：测试员安装
+
+1. iPhone 从 App Store 装 **TestFlight** App（官方）
+2. 用被邀请的 Apple ID 登录
+3. 点邀请邮件里的链接，或用你发的**公开链接**
+4. TestFlight 里点「安装」即可
+
+> 测试员**不需要**登记 UDID，这是相比 ad-hoc 最大的好处。
+
+### 9.6 🔴 上架/灰度前必须知道的三个风险
+
+1. **替代库未换回官方依赖**。当前包用的是 `local_deps/` 里的功能替代库
+   （因原私有依赖 `flutter_lib.git` 返回 403 而反推实现，已过 50 项行为测试 + 安卓真机验证）。
+   **内部灰度可以，但正式上架前强烈建议换回官方原库重建**——
+   替代库无法保证与原库 100% 行为一致，上架后出问题难追溯。
+2. **后端改动尚未部署**。看板接口 `todayRevenue` 由 String 改为数值型是**破坏性变更**，
+   后端没同步发版的话，测试员看到的首页金额会异常。灰度前请确认后端已部署本次改动。
+3. **构建版本号必须递增**。App Store Connect 不允许同一 `versionCode`（CFBundleVersion）重复上传。
+   当前是 1.0.5 / build 7，下次上传前要改成 build 8。
+   改法：编辑 `pubspec.yaml` 的 `version: 1.0.5+7` → `1.0.5+8`。
+
+### 9.7 TestFlight 常见报错
+
+| 现象 | 原因 | 解决 |
+|---|---|---|
+| `Invalid Provisioning Profile` / 签名失败 | 用了 ad-hoc profile 走 app-store 导出 | 确认 `youdake_appstore` 已上传、`archive-method=app-store` |
+| 上传成功但 TestFlight 页看不到构建 | 还在「正在处理」，或出口合规问卷未答 | 等 30 分钟；本包已加 `ITSAppUsesNonExemptEncryption=false` 免问卷 |
+| `beta group not found` | yaml 里 `beta_groups` 填了不存在的组名 | 组名要与 App Store Connect 里完全一致 |
+| 外部测试一直卡在审核 | Beta App Review 未通过 | 检查隐私政策 URL 可访问、测试信息完整 |
+| 提示 build 版本号重复 | 同一 CFBundleVersion 重复上传 | `pubspec.yaml` 里 build 号 +1 |
+| 测试员点链接说「无法接受邀请」 | 用错 Apple ID，或设备 iOS 版本过低 | 用受邀的那个 Apple ID；iOS 需 ≥ 16 |
+
+---
+
+## 十、风险提示（务必知悉）
+
+1. **替代库非官方原库**。`local_deps/` 里的 `itwo_flutter_base`/`itwo_flutter_net` 是我依据项目 195 处调用反推实现的，已过 50 项行为测试（42 项基础 + 8 项扫码回归）+ Android 真机验证（你反馈可用），但无法保证与原库 100% 一致。iOS 首次构建后，请重点验证：登录（MD5+BCrypt）、token 持久化（退出重进不掉登录）、**扫码成功弹「二维码秘钥」弹窗**、推送、首页看板与库存刷新。
 2. **拿到原库权限后应换回官方依赖重建**：把 `pubspec.yaml` 的两个 `path:` 改回 `git:`，删掉 `local_deps/`，重跑构建。
 3. **前后端必须同步发版**：看板接口 `todayRevenue` 由 String 改为数值型，是破坏性变更。后端没部署本次改动的话，首页金额会显示异常。
 4. **Flutter 版本**：codemagic.yaml 锁 3.41.4（项目要求）；本机验证用的是 3.47.3。若 CI 上 3.41.4 有兼容问题，可改成 3.47.3（与本机验证环境一致）。

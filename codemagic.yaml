@@ -126,3 +126,93 @@ workflows:
     #     notify:
     #       success: true
     #       failure: true
+
+  # ===========================================================================
+  #  TestFlight 灰度测试工作流（与上面的 ad-hoc 工作流并存，互不影响）
+  #
+  #  用途：把包上传到 App Store Connect，供 TestFlight 测试员安装。
+  #        内部测试员最多 100 人（免审核）；外部测试员最多 10000 人
+  #        （首个构建需过 Beta App Review，约 1-2 天）。
+  #        构建版本自上传起最长可测 90 天，过期需重传。
+  #
+  #  🔴 与 ad-hoc 的区别：签名用的是「App Store 类型」描述文件，
+  #     不是 ad-hoc 类型。两者不能混用，所以必须单独建一个 profile
+  #     并以引用名 youdake_appstore 上传到 Codemagic（见 README 第九节）。
+  #
+  #  为什么仍用引用名方式而非 distribution_type 自动拉取：
+  #     账号里那张 "Distribution Managed" 是云端托管证书、私钥下载不到，
+  #     自动拉取必然报 "Cannot save Signing Certificates without certificate private key"。
+  #     证书复用已验证可用的 youdake_dist（Apple Distribution，ad-hoc/App Store 通用）。
+  # ===========================================================================
+  ios-testflight:
+    name: 优达客运营 iOS TestFlight 灰度
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      # 上传构建到 App Store Connect 只需 App Manager 权限，youdake-asc 正好是
+      # （之前 401 只发生在「创建证书」，那需要 Admin；上传构建不受影响）
+      app_store_connect: youdake-asc
+    environment:
+      flutter: 3.41.4
+      xcode: latest
+      cocoapods: default
+      ios_signing:
+        provisioning_profiles:
+          - youdake_appstore        # ← App Store 类型，需在 Apple 后台新建后上传
+        certificates:
+          - youdake_dist            # ← 复用已验证可用的 Apple Distribution 证书
+    cache:
+      cache_paths:
+        - ~/.pub-cache
+        - $HOME/Library/Caches/CocoaPods
+    scripts:
+      - name: 配置国内镜像（加速 pub 下载）
+        script: |
+          export PUB_HOSTED_URL="https://pub.flutter-io.cn"
+          export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
+
+      - name: 设置 Xcode 代码签名
+        # archive-method 必须是 app-store，与 profile 类型一致
+        script: xcode-project use-profiles --archive-method=app-store
+
+      - name: 安装 Flutter 依赖（path 指向 local_deps 替代库）
+        script: flutter pub get
+
+      - name: 代码生成（@JsonSerializable/@RestApi/freezed，必须）
+        script: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: 生成本地化代码
+        script: flutter gen-l10n
+
+      - name: 安装 iOS 原生依赖（CocoaPods）
+        script: |
+          cd ios && pod install --repo-update && cd ..
+
+      - name: 构建 release IPA（App Store 签名）
+        script: |
+          # ENV / API_HOST 写死（非机密，理由同 ad-hoc 工作流：控制台变量曾注入为空，
+          # 导致 ROOT_URL="" 而全部接口失败）。推送密钥仍走加密变量。
+          echo "诊断（只看长度，不输出值）: PUSH_APP_KEY len=${#PUSH_APP_KEY}, PUSH_APP_SECRET len=${#PUSH_APP_SECRET}"
+          flutter build ipa --release \
+            --export-options-plist=$HOME/export_options.plist \
+            --dart-define=ENV=release \
+            --dart-define=API_HOST=https://youdake.com/team/ \
+            --dart-define=PUSH_APP_KEY=$PUSH_APP_KEY \
+            --dart-define=PUSH_APP_SECRET=$PUSH_APP_SECRET
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        # 复用 integrations 里引用的 youdake-asc 做认证，不把 .p8 内容写进仓库
+        auth: integration
+        # 上传后自动提交 TestFlight 审核（外部测试需要；内部测试员无需审核即可装）
+        submit_to_testflight: true
+        # 新构建提交前，自动让上一个「正在审核/等待审核」的构建过期，避免堆积
+        expire_build_submitted_for_review: true
+        # 🔴 beta_groups 暂时留空：必须先在 App Store Connect 里建好测试组，
+        #    这里填不存在的组名会导致 publishing 失败。建好组后取消下面两行注释：
+        # beta_groups:
+        #   - 你的内部测试组名
+        # 刻意不配 submit_to_app_store —— 目标是灰度测试，不上架公开分发。
+        # 中国区上架还需 ICP 备案号等合规材料，那是另一件事。
