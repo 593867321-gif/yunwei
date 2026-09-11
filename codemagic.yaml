@@ -36,11 +36,9 @@ workflows:
         distribution_type: ad_hoc       # ad_hoc=内部分发(需登记设备UDID)；改 app_store 可走 TestFlight/上架
         bundle_identifier: com.youdake.operation.ios
       # 🔴 后端地址与推送密钥不入库、不经过任何人，只从 Codemagic 加密环境变量注入。
-      # 你需要在 Codemagic 控制台 Environment variables 新建一个名为 youdake_env 的组，
-      # 勾选 Secure，填入 4 个变量（值见 .env.ci.template 模板）：
+      # 在 Codemagic 该 App 的 Environment variables 里直接添加 4 个 App 级变量（勾 Secret）：
       #   ENV=release  API_HOST=...  PUSH_APP_KEY=...  PUSH_APP_SECRET=...
-      groups:
-        - youdake_env
+      # App 级变量自动注入所有 workflow，无需建组。
     cache:
       cache_paths:
         - ~/.pub-cache
